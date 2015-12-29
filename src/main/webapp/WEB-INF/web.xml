@@ -62,11 +62,6 @@
     <param-value>60000</param-value>
   </context-param>
 
-  <!-- 配置Log4j监听器 -->
-  <listener>
-    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-  </listener>
-
   <servlet>
     <servlet-name>springServlet</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -80,6 +75,11 @@
     <servlet-name>springServlet</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+
+  <!-- 首页 -->
+  <welcome-file-list>
+    <welcome-file>login</welcome-file>
+  </welcome-file-list>
 
   <error-page>
     <error-code>500</error-code>
