@@ -1,17 +1,17 @@
 package com.echounion.mc.modules.sys.dao;
 
-import com.echounion.mc.modules.sys.entity.user;
+import com.echounion.mc.modules.sys.entity.User;
 
-public interface userMapper {
-    int deleteByPrimaryKey(String id);
+public interface UserMapper {
+    int deleteByPrimaryKey(Long id);
 
-    int insert(user record);
+    int insert(User record);
 
-    int insertSelective(user record);
+    int insertSelective(User record);
 
-    user selectByPrimaryKey(String id);
+    User selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(user record);
+    int updateByPrimaryKeySelective(User record);
 
-    int updateByPrimaryKey(user record);
+    int updateByPrimaryKey(User record);
 }
