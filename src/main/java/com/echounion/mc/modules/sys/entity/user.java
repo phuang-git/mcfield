@@ -15,6 +15,12 @@ public class User {
 
     private Boolean locked;
 
+    public User(){}
+
+    public User(String username) {
+        this.username = username;
+    }
+
     public Long getId() {
         return id;
     }
@@ -69,5 +75,9 @@ public class User {
 
     public void setLocked(Boolean locked) {
         this.locked = locked;
+    }
+
+    public String getCredentialsSalt() {
+        return username + salt;
     }
 }

@@ -114,4 +114,11 @@
       locked = #{locked,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="findByUsername" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from sys_user
+    where username = #{user.username,jdbcType=VARCHAR}
+  </select>
 </mapper>

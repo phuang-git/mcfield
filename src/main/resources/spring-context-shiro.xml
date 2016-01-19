@@ -20,7 +20,6 @@
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
         <property name="loginUrl" value="/login"/>
-        <property name="successUrl" value="/views/index"/>
         <property name="unauthorizedUrl" value="/views/error/404"/>
         <property name="filters">
             <map>

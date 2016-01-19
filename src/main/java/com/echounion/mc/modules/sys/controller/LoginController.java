@@ -19,14 +19,14 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginController {
 
     /**
-     * 管理登录
+     * 登录
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(HttpServletRequest req, Model model) {
         Subject subject = SecurityUtils.getSubject();
         // 已登陆则 跳到首页
         if (subject.isAuthenticated()) {
-            return "redirect:/";
+            return "index";
         }
         return "login";
     }
@@ -51,4 +51,5 @@ public class LoginController {
         model.addAttribute("error", error);
         return "login";
     }
+
 }
