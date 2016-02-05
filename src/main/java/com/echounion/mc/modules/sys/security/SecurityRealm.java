@@ -12,7 +12,12 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 /**
- * Created by phuang on 2015/12/26.
+ * @author Phuang
+ * @version V1.0
+ * @Title: SecurityRealm.java
+ * @Package com.echounion.mc.modules.sys.security
+ * @Description: relam
+ * @date 2016/1/19 16:39
  */
 @Component(value = "securityRealm")
 public class SecurityRealm extends AuthorizingRealm {
@@ -22,8 +27,11 @@ public class SecurityRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        String username = (String)principalCollection.getPrimaryPrincipal();
+
         return null;
     }
+
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {

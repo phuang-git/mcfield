@@ -76,11 +76,6 @@
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
-  <!-- 首页 -->
-  <welcome-file-list>
-    <welcome-file>login</welcome-file>
-  </welcome-file-list>
-
   <error-page>
     <error-code>500</error-code>
     <location>/WEB-INF/views/error/500.jsp</location>

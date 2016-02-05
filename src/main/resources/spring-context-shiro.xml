@@ -30,8 +30,9 @@
             <value>
                 <!-- 静态资源允许访问 -->
                 /static/** = anon
-                <!-- 登录页允许访问 -->
                 /login = authc
+                /logout = logout
+                /authenticated = authc
                 <!-- 其他资源需要认证 -->
                 /** = authc
             </value>
@@ -81,6 +82,20 @@
         <property name="storedCredentialsHexEncoded" value="true"/>
     </bean>
 
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="2592000"/><!-- 30天 -->
+    </bean>
+
+    <!-- rememberMe管理器 -->
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <!-- rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度（128 256 512 位）-->
+        <property name="cipherKey"
+                  value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
+
     <!-- Realm实现 -->
     <bean id="realm" class="com.echounion.mc.modules.sys.security.SecurityRealm">
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
@@ -96,16 +111,13 @@
         <!-- cacheManager,集合spring缓存工厂 -->
         <property name="sessionManager" ref="sessionManager" />
         <property name="cacheManager" ref="shiroCacheManager" />
+        <property name="rememberMeManager" ref="rememberMeManager"/>
     </bean>
 
     <!-- 定义授权缓存管理器 -->
     <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
         <property name="cacheManager" ref="cacheManager"/>
     </bean>
-
-
-    <!-- 启用shrio授权注解拦截方式 -->
-    <aop:config proxy-target-class="true"></aop:config>
 
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
@@ -114,7 +126,7 @@
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="exceptionMappings">
             <props>
-                <prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
+                <prop key="org.apache.shiro.authz.UnauthorizedException">error/404</prop>
                 <prop key="java.lang.Throwable">error/500</prop>
             </props>
         </property>

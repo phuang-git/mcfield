@@ -39,6 +39,7 @@ public class LoginController {
         if (subject.isAuthenticated()) {
             return "redirect:/";
         }
+        //ailureKeyAttribute指定登录失败时的request属性key（默认shiroLoginFailure）
         String exceptionClassName = (String)req.getAttribute("shiroLoginFailure");
         String error = null;
         if(UnknownAccountException.class.getName().equals(exceptionClassName)) {
