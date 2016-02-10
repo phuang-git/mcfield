@@ -162,6 +162,11 @@
       <artifactId>shiro-quartz</artifactId>
       <version>${shiro.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.shiro</groupId>
+      <artifactId>shiro-cas</artifactId>
+      <version>${shiro.version}</version>
+    </dependency>
     <!-- Shiro end -->
 
     <!--jstl -->

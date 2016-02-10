@@ -105,8 +105,8 @@
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <!-- 缓存配置 -->
-    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
-          p:configLocation="classpath:${ehcache.configFile}"/>
+    <!--<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"-->
+          <!--p:configLocation="classpath:${ehcache.configFile}"/>-->
 
 
 

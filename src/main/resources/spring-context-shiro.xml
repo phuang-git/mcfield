@@ -16,25 +16,37 @@
         <property name="loginUrl" value="/login"/>
     </bean>
 
+    <!-- 定义授权缓存管理器 -->
+    <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
+    </bean>
+
+    <bean id="casFilter" class="org.apache.shiro.cas.CasFilter">
+        <property name="failureUrl" value="/error/500.jsp"/>
+    </bean>
+
     <!-- Shiro的Web过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
-        <property name="loginUrl" value="/login"/>
+        <property name="loginUrl" value="https://localhost:8443/portal/login?service=https://localhost:9443/mcfield/cas"/>
+        <!--<property name="loginUrl" value="/login"/>-->
         <property name="unauthorizedUrl" value="/views/error/404"/>
         <property name="filters">
             <map>
-                <entry key="authc" value-ref="formAuthenticationFilter"/>
+                <entry key="cas" value-ref="casFilter"/>
+                <!--<entry key="authc" value-ref="formAuthenticationFilter"/>-->
             </map>
         </property>
         <property name="filterChainDefinitions">
             <value>
                 <!-- 静态资源允许访问 -->
                 /static/** = anon
-                /login = authc
+                /cas = cas
+                <!--/login = authc-->
                 /logout = logout
-                /authenticated = authc
+                /authenticated = user
                 <!-- 其他资源需要认证 -->
-                /** = authc
+                /** = user
             </value>
         </property>
     </bean>
@@ -71,8 +83,8 @@
         <property name="sessionValidationSchedulerEnabled" value="true"/>
         <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
         <property name="sessionDAO" ref="sessionDAO"/>
-        <property name="sessionIdCookie" ref="sessionIdCookie"/>
         <property name="sessionIdCookieEnabled" value="true"/>
+        <property name="sessionIdCookie" ref="sessionIdCookie"/>
     </bean>
 
     <!-- 凭证匹配器 -->
@@ -101,23 +113,32 @@
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
     </bean>
 
+    <bean id="casRealm" class="com.echounion.mc.modules.sys.security.MyCasRealm">
+        <property name="cachingEnabled" value="true"/>
+        <property name="authenticationCachingEnabled" value="true"/>
+        <property name="authenticationCacheName" value="authenticationCache"/>
+        <property name="authorizationCachingEnabled" value="true"/>
+        <property name="authorizationCacheName" value="authorizationCache"/>
+        <property name="casServerUrlPrefix" value="https://localhost:8443/portal"/>
+        <property name="casService" value="https://localhost:9443/mcfield/cas"/>
+    </bean>
+
+    <bean id="casSubjectFactory" class="org.apache.shiro.cas.CasSubjectFactory"/>
+
     <!-- 定义Shiro安全管理配置 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realms">
             <list>
-                <ref bean="realm"/>
+                <ref bean="casRealm"/>
             </list>
         </property>
         <!-- cacheManager,集合spring缓存工厂 -->
         <property name="sessionManager" ref="sessionManager" />
         <property name="cacheManager" ref="shiroCacheManager" />
         <property name="rememberMeManager" ref="rememberMeManager"/>
+        <property name="subjectFactory" ref="casSubjectFactory"/>
     </bean>
 
-    <!-- 定义授权缓存管理器 -->
-    <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-        <property name="cacheManager" ref="cacheManager"/>
-    </bean>
 
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
