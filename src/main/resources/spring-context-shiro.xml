@@ -25,6 +25,10 @@
         <property name="failureUrl" value="/error/500.jsp"/>
     </bean>
 
+    <bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
+        <property name="redirectUrl" value="https://localhost:8443/portal/logout?service=https://localhost:9443/mcfield"/>
+    </bean>
+
     <!-- Shiro的Web过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
@@ -34,6 +38,7 @@
         <property name="filters">
             <map>
                 <entry key="cas" value-ref="casFilter"/>
+                <entry key="logout" value-ref="logoutFilter" />
                 <!--<entry key="authc" value-ref="formAuthenticationFilter"/>-->
             </map>
         </property>
@@ -55,7 +60,7 @@
     <!-- 指定本系统SESSIONID, 默认为: JSESSIONID 问题: 与SERVLET容器名冲突, 如JETTY, TOMCAT 等默认JSESSIONID,
 		当跳出SHIRO SERVLET时如ERROR-PAGE容器会为JSESSIONID重新分配值导致登录会话丢失! -->
     <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-        <constructor-arg value="mc.session.id"/>
+        <constructor-arg value="sid"/>
         <property name="httpOnly" value="true"/>
         <property name="maxAge" value="-1"/>
     </bean>
@@ -133,7 +138,7 @@
             </list>
         </property>
         <!-- cacheManager,集合spring缓存工厂 -->
-        <property name="sessionManager" ref="sessionManager" />
+        <!--<property name="sessionManager" ref="sessionManager" />-->
         <property name="cacheManager" ref="shiroCacheManager" />
         <property name="rememberMeManager" ref="rememberMeManager"/>
         <property name="subjectFactory" ref="casSubjectFactory"/>
